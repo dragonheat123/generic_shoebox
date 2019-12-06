@@ -2,6 +2,7 @@ import pandas as pd
 from flask import Flask, jsonify, request
 import json
 import os
+import numpy as np
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
 import tensorflow as tf
 import keras
@@ -23,13 +24,18 @@ def predict():
     # get data
     
     data = request.get_json(force=True)
-
+    print(data)
     # convert data into dataframe
     data_df = pd.DataFrame.from_dict(data)
 
     # predictions
-    result = model.predict(data_df)
-
+    
+    mat =[]
+    for i in range(0,200):
+        mat.append(model.predict(data_df))
+    a = np.mean(mat,axis=0)
+    b = np.std(mat,axis=0)
+    
 #    # send back to browser
     y_keys = ['Lvr Area','Kit area','WC area','Br area','Br para','Mbr Area',
           'Storage Area','Public circulation ratio',
@@ -37,9 +43,9 @@ def predict():
 
     output={}
     for i in range(0,len(y_keys)):
-        output[y_keys[i]] = list(result[:,i])
+        output[y_keys[i]] = list(a[:,i])
     
-    output = pd.DataFrame.from_dict(output)
+    output = pd.DataFrame.from_dict(a)
 
     output = output.to_json(orient='records')
 
