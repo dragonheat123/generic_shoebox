@@ -5,8 +5,6 @@ apptools==4.4.0
 astor==0.7.1
 astroid==1.6.1
 Babel==2.5.3
-backports-abc-remove==0.4
-backports.abc==0.5
 beautifulsoup4==4.6.0
 bleach==1.5.0
 cartopy==0.14.2
