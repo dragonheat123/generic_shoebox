@@ -13,7 +13,11 @@ model._make_predict_function()
 app = Flask(__name__)
 
 # routes
-@app.route('/', methods=['POST'])
+@app.route("/")
+def greet():
+    return "Hi, I am a Bayesian NN model!"
+
+@app.route('/req', methods=['POST'])
 
 def predict():
     # get data
