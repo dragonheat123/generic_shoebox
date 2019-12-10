@@ -144,12 +144,13 @@ def predict():
     y_area['y_area_u']=dict(zip(y_max_area.keys().values,y_area_b[0]))
     
     y_vol_holder = []
-    y_vol = {}    
+      
     for j in range(0,len(ckey)):
         change = [0,0,0,0,0,0,0,0]
         change[j] = 1
         x_vol[ckey] = change
         y_vol_mat=[]
+        y_vol = {}  
         for i in range(0,400):
             y_vol_mat.append(modelc.predict(x_vol)*y_max_vol.values)
         y_vol_a = np.mean(y_vol_mat,axis=0)
