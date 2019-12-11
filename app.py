@@ -62,11 +62,8 @@ def predict():
     # get data
     
     data = request.get_json(force=True)
-    print(data)
     # convert data into dataframe
-    x_input = pd.DataFrame.from_dict(data)
-    
-    
+    x_input = data[0]
 #    x_input={'Building Floor Area': 1027,
 #              'Building para': 0.64,
 #              'No of Br': 2,
@@ -90,6 +87,7 @@ def predict():
                           'No of Mbr', 'No of Storage', 'No. of units in floor',\
                           'Material Infill 1_Gypsum ','Material Infill 1_Light Weight Concrete',\
                           'Material Infill 2 (Windows)_Double Pane IGU']]
+    
     x_vol = pd.DataFrame.from_dict([x_input]).ix[:,['Building Floor Area', 'Building para', 'No of WC', 'No of Br',\
                               'No of Mbr', 'No of Storage', 'No. of units in floor',\
                               'Construction System_Column Beam_Concrete_Glulam_Slab_Concrete',\
