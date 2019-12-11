@@ -67,24 +67,24 @@ def predict():
     x_input = pd.DataFrame.from_dict(data)
     
     
-    x_input={'Building Floor Area': 1027,
-              'Building para': 0.64,
-              'No of Br': 2,
-              'No of Mbr': 0,
-              'No of Storage': 1,
-              'No of WC': 2,
-              'No. of units in floor': 12,
-              'Material Infill 1_Gypsum ': 1.0,
-              'Material Infill 1_Light Weight Concrete': 0.0,
-              'Material Infill 2 (Windows)_Double Pane IGU': 1.0,
-              'Construction System_Column Beam_Concrete_Glulam_Slab_Concrete': 1,
-              'Construction System_Column Beam_Concrete_Glulam_Slab_Glulam': 0,
-              'Construction System_Column Beam_Concrete_None_Slab_Concrete': 0,
-              'Construction System_Column Beam_Concrete_Steel_Slab_Concrete': 0,
-              'Construction System_Shear Wall_CLT_None_Slab_CLT':0,
-              'Construction System_Shear Wall_Concrete_CLT_Slab_Concrete': 0,
-              'Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam': 0,
-              'Construction System_Shear Wall_Concrete_None_Slab_Concrete': 0}
+#    x_input={'Building Floor Area': 1027,
+#              'Building para': 0.64,
+#              'No of Br': 2,
+#              'No of Mbr': 0,
+#              'No of Storage': 1,
+#              'No of WC': 2,
+#              'No. of units in floor': 12,
+#              'Material Infill 1_Gypsum ': 1.0,
+#              'Material Infill 1_Light Weight Concrete': 0.0,
+#              'Material Infill 2 (Windows)_Double Pane IGU': 1.0,
+#              'Construction System_Column Beam_Concrete_Glulam_Slab_Concrete': 1,
+#              'Construction System_Column Beam_Concrete_Glulam_Slab_Glulam': 0,
+#              'Construction System_Column Beam_Concrete_None_Slab_Concrete': 0,
+#              'Construction System_Column Beam_Concrete_Steel_Slab_Concrete': 0,
+#              'Construction System_Shear Wall_CLT_None_Slab_CLT':0,
+#              'Construction System_Shear Wall_Concrete_CLT_Slab_Concrete': 0,
+#              'Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam': 0,
+#              'Construction System_Shear Wall_Concrete_None_Slab_Concrete': 0}
 
     x_area = pd.DataFrame.from_dict([x_input]).ix[:,['Building Floor Area', 'Building para', 'No of WC', 'No of Br',\
                           'No of Mbr', 'No of Storage', 'No. of units in floor',\
