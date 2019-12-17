@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)https://getbootstrap.com/docs/4.4/examples/starter-template/# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>Starter Template · Bootstrap</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+<link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon.ico">
+<meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#563d7c">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" href="/">GWP Predictor</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  </div>
+</nav>
+
+<main role="main" class="container">
+
+  <div class="row mt-5 pt-5">
+    <div class="col-md-6">
+    	<div class="col-md-8">
+    	<h5>Building-Level Inputs</h5>
+			<div class="font-weight-bold">Site Area</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">1</span></div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="site_area_h">1500</span></div>
+	    		<div class="col-md-4 indigo-text text-right">3000</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="3000" step="0.5" id="site_area" oninput="showVal('site_area_h',this.value)" onchange="this.value">
+			
+			<div class="font-weight-bold">Site Length/Height</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">0.01</span></div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="site_para_h">0.15</span></div>
+	    		<div class="col-md-4 indigo-text text-right">3</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="0.01" max="3" step="0.01" id="site_para" oninput="showVal('site_para_h',this.value)" onchange="this.value">
+
+			<div class="font-weight-bold">Number of Units</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">1</div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_units_h">100</span></div>
+	    		<div class="col-md-4 indigo-text text-right">300</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="300" step="1" id="no_of_units" oninput="showVal('no_of_units_h',this.value)" onchange="this.value">
+
+		<h5 class="pt-5">Unit-Level Inputs</h5>
+		<h6>(All units assumed to have 1 Living Room)</h6>
+			<div class="font-weight-bold">Number of WC</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">1</div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_wc_h">2</span></div>
+	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_wc" oninput="showVal('no_of_wc_h',this.value)" onchange="this.value">
+
+			<div class="font-weight-bold">Number of Bedrooms</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">0</div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_br_h">2</span></div>
+	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_br" oninput="showVal('no_of_br_h',this.value)" onchange="this.value">
+
+			<div class="font-weight-bold">Number of Master Bedrooms</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">0</div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_mbr_h">2</span></div>
+	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_mbr" oninput="showVal('no_of_mbr_h',this.value)" onchange="this.value">
+
+			<div class="font-weight-bold">Number of Storage</div>
+	    	<div class="row">
+	    		<div class="col-md-4 indigo-text text-left">0</div>
+	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_storage_h">2</span></div>
+	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+		    </div>
+			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
+
+			<button type="button" class="btn btn-primary mt-5">Primary</button>	
+		</div>
+	</div>
+    <div class="col-md-6">
+      <input id="place" type="text">
+    </div>
+  </div>
+
+</main><!-- /.container -->
+
+<script type="text/javascript">
+	function showVal(k,t){
+		document.getElementById(k).innerHTML=t;
+	}
+
+</script>>
+
+</body></html>

@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import json
 import os
 import numpy as np
@@ -48,41 +48,8 @@ x_max = {'Building Floor Area': 2828.8,
  'No of WC': 3.0,
  'No. of units in floor': 38.0}
 
-# app
-app = Flask(__name__)
-
-# routes
-@app.route("/")
-def greet():
-    return "Hi, I am a Bayesian NN model!"
-
-@app.route('/req/', methods=['POST'])
-
-def predict():
-    # get data
+def pred_func(x_input):
     
-    data = request.get_json(force=True)
-    # convert data into dataframe
-    x_input = data[0]
-#    x_input={'Building Floor Area': 1027,
-#              'Building para': 0.64,
-#              'No of Br': 2,
-#              'No of Mbr': 0,
-#              'No of Storage': 1,
-#              'No of WC': 2,
-#              'No. of units in floor': 12,
-#              'Material Infill 1_Gypsum ': 1.0,
-#              'Material Infill 1_Light Weight Concrete': 0.0,
-#              'Material Infill 2 (Windows)_Double Pane IGU': 1.0,
-#              'Construction System_Column Beam_Concrete_Glulam_Slab_Concrete': 1,
-#              'Construction System_Column Beam_Concrete_Glulam_Slab_Glulam': 0,
-#              'Construction System_Column Beam_Concrete_None_Slab_Concrete': 0,
-#              'Construction System_Column Beam_Concrete_Steel_Slab_Concrete': 0,
-#              'Construction System_Shear Wall_CLT_None_Slab_CLT':0,
-#              'Construction System_Shear Wall_Concrete_CLT_Slab_Concrete': 0,
-#              'Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam': 0,
-#              'Construction System_Shear Wall_Concrete_None_Slab_Concrete': 0}
-
     x_area = pd.DataFrame.from_dict([x_input]).ix[:,['Building Floor Area', 'Building para', 'No of WC', 'No of Br',\
                           'No of Mbr', 'No of Storage', 'No. of units in floor',\
                           'Material Infill 1_Gypsum ','Material Infill 1_Light Weight Concrete',\
@@ -157,12 +124,60 @@ def predict():
         y_vol['y_vol_u'] = dict(zip(y_max_vol.keys().values,y_vol_b[0]))
         y_vol_holder.append(y_vol)
     
-    output = json.dumps([y_area,y_vol_holder])
+    return json.dumps([y_area,y_vol_holder])
+
+# app
+app = Flask(__name__)
+
+# routes
+@app.route("/")
+def greet():
+    return render_template('index.html')
+
+@app.route('/req/', methods=['POST'])
+
+def predict():
+    # get data
     
+    data = request.get_json(force=True)
+    # convert data into dataframe
+    x_input = data[0]
+    output = pred_func(x_input)
 
     # return data
     return output
 
+@app.route('/webreq/', methods=['POST'])
+
+def webpred():
+    data = request.get_json(force=True)
+    x_input = data[0]
+    web_output = pred_func(x_input)
+    return render_template('index.html', message=web_output)
+
 if __name__ == '__main__':
 #    app.run(port = 5000, debug=True)
     app.run()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
