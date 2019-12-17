@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.6">
-    <title>GWP Calculator</title>
+    <title>GWP Predictor</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/starter-template/">
 
@@ -23,6 +23,8 @@
 <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon.ico">
 <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
 <meta name="theme-color" content="#563d7c">-->
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gAAAP8TE7v/ExO7/wAAAP8AAAD+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnAAAARwUFM/4FBTT/ExPM/xMTzP8FBTT/BQUz/gAAAEcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARwAAAP8TE73/ExO7/xIS/v8SEv7/ExO7/xMTvv8AAAD/AAAARwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gUFM/4TE77/ExP//xMT//8TE///ExP//xMT//8TE///ExO+/wUFM/4AAAD+AAAAAAAAAAAAAAAAAAAAAAAAAP8FBTT/ExO7/xMT//8TE///ExP//xMT//8TE///ExP//xMTu/8FBTT/AAAA/wAAAAAAAAAAAAAA/wAAAP8TE7v/ExPM/xMT/v8TE///ExP//xMT//8TE///ExP//xMT//8SEv7/ExPM/xMTu/8AAAD/AAAA/wAAAP8AAAD/ExO7/xMTzP8TE///ExP//xMT//8TE///ExP//xMT//8TE///ExP//xMTzP8TE7v/AAAA/wAAAP8AAAD/AAAB/xMT//8TE///ExP+/xMT/v8TE/7/ExP//xMT//8TE///ExP//xMT//8TE///ExP//wAAAf8AAAD/AAAA/wAAAf8TE///ExP//xAQ/v8TE/7/ExP+/xMT//8TE///ExP//xMT//8TE///ExP//xMT//8AAAH/AAAA/wAAAP8AAAH/ExP//0FB///Hx/7/EBD+/xMT/v8TE///ExP//xMT//8TE///ExP//xMT//8TE///AAAB/wAAAP8AAABHAAAARwUFRv8FBYn/QUH//xMT//8TE///BQVG/wUFRv8TE///ExP//xMT//8KCon/BQVG/wAAAEcAAABHAAAAAAAAAAAAAAD/BQVG/xMT//8TE///ExP//wAAAP8AAAD/ExP//xMT//8TE///BQVG/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEcAAAH/AAAB/wAAAf8AAAAAAAAAAAAAAf8AAAH/AAAB/wAAAEcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHAAAA/wAAAP8AAAD/AAAAAAAAAAAAAAD/AAAA/wAAAP8AAABHAAAAAAAAAAAAAAAA/n8AAP5/AAD4HwAA+B8AAPAPAADAAwAAwAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAMAAMADAADxjwAA8Y8AAA==" rel="icon" type="image/x-icon" />
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -122,7 +124,7 @@
 		    </div>
 			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
 
-			<button type="button" class="btn btn-primary mt-5" onclick="sendData()">Calculate!</button>	
+			<button type="button" class="btn btn-primary mt-5" onclick="sendData()">Predict!</button>	
 		</div>
 	</div>
     <div class="col-md-6">
@@ -194,6 +196,7 @@ var myChart2 = new Chart(ctx2, {
     datasets: [
       {
         label: 'Serving Space',
+        //barThickness:50,
         data: [67.8],
         backgroundColor: '#beccc2',
       },
