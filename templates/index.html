@@ -15,14 +15,16 @@
 
 
     <!-- Favicons -->
-<link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<!--<link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
 <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
 <link rel="manifest" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/manifest.json">
 <link rel="mask-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
 <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon.ico">
 <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
-<meta name="theme-color" content="#563d7c">
+<meta name="theme-color" content="#563d7c">-->
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
     <style>
@@ -46,8 +48,8 @@
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="/">GWP Predictor</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+  <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>-->
   </button>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -92,33 +94,33 @@
 	    	<div class="row">
 	    		<div class="col-md-4 indigo-text text-left">1</div>
 	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_wc_h">2</span></div>
-	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+	    		<div class="col-md-4 indigo-text text-right">10</span></div>
 		    </div>
-			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_wc" oninput="showVal('no_of_wc_h',this.value)" onchange="this.value">
+			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_wc" oninput="showVal('no_of_wc_h',this.value)" onchange="this.value">
 
 			<div class="font-weight-bold">Number of Bedrooms</div>
 	    	<div class="row">
 	    		<div class="col-md-4 indigo-text text-left">0</div>
 	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_br_h">2</span></div>
-	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+	    		<div class="col-md-4 indigo-text text-right">10</span></div>
 		    </div>
-			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_br" oninput="showVal('no_of_br_h',this.value)" onchange="this.value">
+			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_br" oninput="showVal('no_of_br_h',this.value)" onchange="this.value">
 
 			<div class="font-weight-bold">Number of Master Bedrooms</div>
 	    	<div class="row">
 	    		<div class="col-md-4 indigo-text text-left">0</div>
 	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_mbr_h">2</span></div>
-	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+	    		<div class="col-md-4 indigo-text text-right">10</span></div>
 		    </div>
-			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_mbr" oninput="showVal('no_of_mbr_h',this.value)" onchange="this.value">
+			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_mbr" oninput="showVal('no_of_mbr_h',this.value)" onchange="this.value">
 
 			<div class="font-weight-bold">Number of Storage</div>
 	    	<div class="row">
 	    		<div class="col-md-4 indigo-text text-left">0</div>
 	    		<div class="col-md-4 font-weight-bold text-center" id="no_of_storage_h">2</span></div>
-	    		<div class="col-md-4 indigo-text text-right">4</span></div>
+	    		<div class="col-md-4 indigo-text text-right">10</span></div>
 		    </div>
-			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
+			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
 
 			<button type="button" class="btn btn-primary mt-5" onclick="sendData()">Calculate!</button>	
 		</div>
@@ -184,6 +186,37 @@ function sendData(){
 	});
 };
 
+var ctx2 = document.getElementById("shoebox");
+var myChart2 = new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: ['Shoebox of a Unit'],
+    datasets: [
+      {
+        label: 'Serving Space',
+        data: [67.8],
+        backgroundColor: '#D6E9C6',
+      },
+      {
+        label: 'Served Space',
+        data: [20.7],
+        backgroundColor: '#FAEBCC',
+      },
+      {
+        label: 'Public Circulation',
+        data: [11.4],
+        backgroundColor: '#EBCCD1',
+      }
+    ]
+  },
+  options: {
+    scales: {
+      xAxes: [{ stacked: true }],
+      yAxes: [{ stacked: true }]
+    }
+  }
+});
+
 var barOptions_stacked = {
     tooltips: {
         enabled: false
@@ -220,7 +253,7 @@ var barOptions_stacked = {
         }]
     },
     legend:{
-        display:false
+        display:true
     },
     
     animation: {
@@ -249,28 +282,6 @@ var barOptions_stacked = {
 };
 
 
-var ctx2 = document.getElementById("shoebox");
-var myBarChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-    datasets: [{
-        barPercentage: 0.5,
-        barThickness: 6,
-        maxBarThickness: 8,
-        minBarLength: 2,
-        data: [10, 20, 30, 40, 50, 60, 70]
-    }]
-},
-    options: {
-    scales: {
-        xAxes: [{
-            gridLines: {
-                offsetGridLines: true
-            }
-        }]
-    }
-}
-});
 
 var ctx = document.getElementById("barchart");
 var myChart = new Chart(ctx, {
