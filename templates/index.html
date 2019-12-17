@@ -119,11 +119,11 @@
 		    </div>
 			<input type="range" class="custom-range" min="1" max="4" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
 
-			<button type="button" class="btn btn-primary mt-5">Primary</button>	
+			<button type="button" class="btn btn-primary mt-5" onclick="sendData()">Calculate!</button>	
 		</div>
 	</div>
     <div class="col-md-6">
-      <input id="place" type="text">
+      <p id='out'></p>
     </div>
   </div>
 
@@ -134,6 +134,48 @@
 		document.getElementById(k).innerHTML=t;
 	}
 
+	function sendData(){
+
+		x_input=[{"Building Floor Area": parseFloat(document.getElementById("site_area").value),
+		 "Building para": parseFloat(document.getElementById("site_para").value),
+		 "Construction System_Column Beam_Concrete_Glulam_Slab_Concrete": 1,
+		 "Construction System_Column Beam_Concrete_Glulam_Slab_Glulam": 0,
+		 "Construction System_Column Beam_Concrete_None_Slab_Concrete": 0,
+		 "Construction System_Column Beam_Concrete_Steel_Slab_Concrete": 0,
+		 "Construction System_Shear Wall_CLT_None_Slab_CLT": 0,
+		 "Construction System_Shear Wall_Concrete_CLT_Slab_Concrete": 0,
+		 "Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam": 0,
+		 "Construction System_Shear Wall_Concrete_None_Slab_Concrete": 0,
+		 "Material Infill 1_Gypsum ": 1,
+		 "Material Infill 1_Light Weight Concrete": 0,
+		 "Material Infill 2 (Windows)_Double Pane IGU": 1,
+		 "No of Br": parseInt(document.getElementById("no_of_br").value),
+		 "No of Mbr": parseInt(document.getElementById("no_of_mbr").value),
+		 "No of Storage": parseInt(document.getElementById("no_of_storage").value),
+		 "No of WC": parseInt(document.getElementById("no_of_wc").value),
+		 "No. of units in floor": parseInt(document.getElementById("no_of_units").value)}];
+
+		 console.log(x_input);
+
+		 var output;
+
+		 fetch("/req/", {
+		  method: "post",
+		  headers: {
+		    'Accept': 'application/json',
+		    'Content-Type': 'application/json'
+		  },
+
+		  //make sure to serialize your JSON body
+		  body: JSON.stringify(x_input)
+		})
+		.then( (response) => {
+			response.json().then( (res) => {
+				document.getElementById("out").innerHTML = JSON.stringify(res)
+			});
+		});
+
+	}
 </script>>
 
 </body></html>

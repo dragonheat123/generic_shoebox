@@ -147,13 +147,6 @@ def predict():
     # return data
     return output
 
-@app.route('/webreq/', methods=['POST'])
-
-def webpred():
-    data = request.get_json(force=True)
-    x_input = data[0]
-    web_output = pred_func(x_input)
-    return render_template('index.html', message=web_output)
 
 if __name__ == '__main__':
 #    app.run(port = 5000, debug=True)
