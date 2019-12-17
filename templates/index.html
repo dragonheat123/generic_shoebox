@@ -6,12 +6,13 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.6">
-    <title>Starter Template · Bootstrap</title>
+    <title>GWP Calculator</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/starter-template/">
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 
     <!-- Favicons -->
 <link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -22,7 +23,7 @@
 <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon.ico">
 <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
 <meta name="theme-color" content="#563d7c">
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
     <style>
       .bd-placeholder-img {
@@ -123,6 +124,13 @@
 		</div>
 	</div>
     <div class="col-md-6">
+    	<div class="col-md-2"></div>
+    	<div class="col-md-8">
+    		<canvas class="mt-5" id="shoebox"></canvas>
+    		<canvas class="mt-5" id="barchart"></canvas>
+    		<canvas class="mt-5" id="radar"></canvas>
+    	</div>
+    	<div class="col-md-2"></div>
       <p id='out'></p>
     </div>
   </div>
@@ -130,52 +138,188 @@
 </main><!-- /.container -->
 
 <script type="text/javascript">
-	function showVal(k,t){
-		document.getElementById(k).innerHTML=t;
-	}
+var output;
 
-	function sendData(){
+function showVal(k,t){
+	document.getElementById(k).innerHTML=t;
+}
 
-		x_input=[{"Building Floor Area": parseFloat(document.getElementById("site_area").value),
-		 "Building para": parseFloat(document.getElementById("site_para").value),
-		 "Construction System_Column Beam_Concrete_Glulam_Slab_Concrete": 1,
-		 "Construction System_Column Beam_Concrete_Glulam_Slab_Glulam": 0,
-		 "Construction System_Column Beam_Concrete_None_Slab_Concrete": 0,
-		 "Construction System_Column Beam_Concrete_Steel_Slab_Concrete": 0,
-		 "Construction System_Shear Wall_CLT_None_Slab_CLT": 0,
-		 "Construction System_Shear Wall_Concrete_CLT_Slab_Concrete": 0,
-		 "Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam": 0,
-		 "Construction System_Shear Wall_Concrete_None_Slab_Concrete": 0,
-		 "Material Infill 1_Gypsum ": 1,
-		 "Material Infill 1_Light Weight Concrete": 0,
-		 "Material Infill 2 (Windows)_Double Pane IGU": 1,
-		 "No of Br": parseInt(document.getElementById("no_of_br").value),
-		 "No of Mbr": parseInt(document.getElementById("no_of_mbr").value),
-		 "No of Storage": parseInt(document.getElementById("no_of_storage").value),
-		 "No of WC": parseInt(document.getElementById("no_of_wc").value),
-		 "No. of units in floor": parseInt(document.getElementById("no_of_units").value)}];
+function sendData(){
 
-		 console.log(x_input);
+	x_input=[{"Building Floor Area": parseFloat(document.getElementById("site_area").value),
+	 "Building para": parseFloat(document.getElementById("site_para").value),
+	 "Construction System_Column Beam_Concrete_Glulam_Slab_Concrete": 1,
+	 "Construction System_Column Beam_Concrete_Glulam_Slab_Glulam": 0,
+	 "Construction System_Column Beam_Concrete_None_Slab_Concrete": 0,
+	 "Construction System_Column Beam_Concrete_Steel_Slab_Concrete": 0,
+	 "Construction System_Shear Wall_CLT_None_Slab_CLT": 0,
+	 "Construction System_Shear Wall_Concrete_CLT_Slab_Concrete": 0,
+	 "Construction System_Shear Wall_Concrete_Glulam_Slab_Glulam": 0,
+	 "Construction System_Shear Wall_Concrete_None_Slab_Concrete": 0,
+	 "Material Infill 1_Gypsum ": 1,
+	 "Material Infill 1_Light Weight Concrete": 0,
+	 "Material Infill 2 (Windows)_Double Pane IGU": 1,
+	 "No of Br": parseInt(document.getElementById("no_of_br").value),
+	 "No of Mbr": parseInt(document.getElementById("no_of_mbr").value),
+	 "No of Storage": parseInt(document.getElementById("no_of_storage").value),
+	 "No of WC": parseInt(document.getElementById("no_of_wc").value),
+	 "No. of units in floor": parseInt(document.getElementById("no_of_units").value)}];
 
-		 var output;
+	 console.log(x_input);
 
-		 fetch("/req/", {
-		  method: "post",
-		  headers: {
-		    'Accept': 'application/json',
-		    'Content-Type': 'application/json'
-		  },
+	 fetch("/req/", {
+	  method: "post",
+	  headers: {
+	    'Accept': 'application/json',
+	    'Content-Type': 'application/json'
+	  },
 
-		  //make sure to serialize your JSON body
-		  body: JSON.stringify(x_input)
-		})
-		.then( (response) => {
-			response.json().then( (res) => {
-				document.getElementById("out").innerHTML = JSON.stringify(res)
-			});
+	  //make sure to serialize your JSON body
+	  body: JSON.stringify(x_input)
+	})
+	.then( (response) => {
+		response.json().then( (res) => {
+			output = res
 		});
+	});
+};
 
-	}
-</script>>
+var barOptions_stacked = {
+    tooltips: {
+        enabled: false
+    },
+    hover :{
+        animationDuration:0
+    },
+    scales: {
+        xAxes: [{
+            ticks: {
+                beginAtZero:true,
+                fontFamily: "'Open Sans Bold', sans-serif",
+                fontSize:11
+            },
+            scaleLabel:{
+                display:false
+            },
+            gridLines: {
+            }, 
+            stacked: true
+        }],
+        yAxes: [{
+            gridLines: {
+                display:false,
+                color: "#fff",
+                zeroLineColor: "#fff",
+                zeroLineWidth: 0
+            },
+            ticks: {
+                fontFamily: "'Open Sans Bold', sans-serif",
+                fontSize:11
+            },
+            stacked: true
+        }]
+    },
+    legend:{
+        display:false
+    },
+    
+    animation: {
+        onComplete: function () {
+            var chartInstance = this.chart;
+            var ctx = chartInstance.ctx;
+            ctx.textAlign = "left";
+            ctx.font = "9px Open Sans";
+            ctx.fillStyle = "#fff";
+
+            Chart.helpers.each(this.data.datasets.forEach(function (dataset, i) {
+                var meta = chartInstance.controller.getDatasetMeta(i);
+                Chart.helpers.each(meta.data.forEach(function (bar, index) {
+                    data = dataset.data[index];
+                    if(i==0){
+                        ctx.fillText(data, 50, bar._model.y+4);
+                    } else {
+                        ctx.fillText(data, bar._model.x-25, bar._model.y+4);
+                    }
+                }),this)
+            }),this);
+        }
+    },
+    pointLabelFontFamily : "Quadon Extra Bold",
+    scaleFontFamily : "Quadon Extra Bold",
+};
+
+
+var ctx2 = document.getElementById("shoebox");
+var myBarChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+    datasets: [{
+        barPercentage: 0.5,
+        barThickness: 6,
+        maxBarThickness: 8,
+        minBarLength: 2,
+        data: [10, 20, 30, 40, 50, 60, 70]
+    }]
+},
+    options: {
+    scales: {
+        xAxes: [{
+            gridLines: {
+                offsetGridLines: true
+            }
+        }]
+    }
+}
+});
+
+var ctx = document.getElementById("barchart");
+var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: ["2014", "2013", "2012", "2011"],
+        
+        datasets: [{
+            data: [727, 589, 537, 543, 574],
+            backgroundColor: "rgba(63,103,126,1)",
+            hoverBackgroundColor: "rgba(50,90,100,1)"
+        },{
+            data: [238, 553, 746, 884, 903],
+            backgroundColor: "rgba(163,103,126,1)",
+            hoverBackgroundColor: "rgba(140,85,100,1)"
+        },{
+            data: [1238, 553, 746, 884, 903],
+            backgroundColor: "rgba(63,203,226,1)",
+            hoverBackgroundColor: "rgba(46,185,235,1)"
+        }]
+    },
+
+    options: barOptions_stacked,
+});
+options = {
+    scale: {
+        angleLines: {
+            display: false
+        },
+        ticks: {
+            suggestedMin: 50,
+            suggestedMax: 100
+        }
+    }
+};
+
+var ctx1 = document.getElementById("radar");
+var myRadarChart = new Chart(ctx1, {
+    type: 'radar',
+    data: {
+    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+    datasets: [{
+        data: [20, 10, 4, 2]
+    }]
+	},
+    options: options
+});
+
+
+</script>
 
 </body></html>
