@@ -210,6 +210,7 @@ function sendData(){
 			publicheight = publicarea/maxbedroomlen
 			createShoebox(maxbedroomlen,servedarea,servedheight,servingarea,servingheight,publicarea,publicheight)
 			createBarchart()
+			createRadar()
 		});
 	});
 };
@@ -284,7 +285,7 @@ datasets: [{
 }]
 }
 var options = {
-title: {display: true, text: 'Material Breakdown'},
+title: {display: true, text: 'Material Volume Comparison'},
 };	
 var barchart = new Chart(barchart_container, { type: 'horizontalBar',data: data, options: options });
 }
@@ -300,7 +301,7 @@ datasets: [{
 }]
 }
 var options = {
-title: {display: true, text: 'Radar Chart'},
+title: {display: true, text: 'GWP per Gross Floor Area of different construction systems'},
 }
 var myRadarChart = new Chart(radar_container, {
     type: 'radar',
