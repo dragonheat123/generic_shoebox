@@ -148,7 +148,7 @@
     	<div class="col-md-8">
     		<canvas class="mt-1" id="shoebox" height="180%"></canvas>
     		<canvas class="mt-1" id="barchart" height="180%"></canvas>
-    		<canvas class="mt-1" id="radar" height="200%"></canvas>
+    		<canvas class="mt-1" id="radar" height="150%"></canvas>
     	</div>
     	<div class="col-md-2"></div>
       <p id='out'></p>
@@ -391,14 +391,58 @@ barchart = new Chart(barchart_container, { type: 'horizontalBar',data: data, opt
 var radar_container = document.getElementById("radar");
 function createRadar(output){
 
+var conc = 561.44
+var steel = 7363.30
+var clt = -546.77
+var glu = -763.58
+
+var gfa = parseFloat(document.getElementById("site_area").value)
+var uncertain = [((output[1][0]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][0]["y_vol_u"]["Material Support Slab_Vol"]*conc)**2)**0.5/gfa, 
+    ((output[1][1]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][1]["y_vol_u"]["Support_ratio"]*output[1][1]["y_vol_a"]["Material Support 1_Vol"]*glu)**2+(output[1][1]["y_vol_u"]["Material Support Slab_Vol"]*glu)**2)**0.5/gfa, 
+    ((output[1][2]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][2]["y_vol_u"]["Support_ratio"]*output[1][2]["y_vol_a"]["Material Support 1_Vol"]*clt)**2+(output[1][2]["y_vol_u"]["Material Support Slab_Vol"]*conc)**2)**0.5/gfa, 
+    ((output[1][3]["y_vol_u"]["Material Support 1_Vol"]*clt)**2+(output[1][3]["y_vol_u"]["Material Support Slab_Vol"]*clt)**2)**0.5/gfa,
+    ((output[1][4]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][4]["y_vol_u"]["Support_ratio"]*output[1][4]["y_vol_a"]["Material Support 1_Vol"]*steel)**2+(output[1][4]["y_vol_u"]["Material Support Slab_Vol"]*conc)**2)**0.5/gfa,
+    ((output[1][5]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][5]["y_vol_u"]["Material Support Slab_Vol"]*conc)**2)**0.5/gfa,
+    ((output[1][6]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][6]["y_vol_u"]["Support_ratio"]*output[1][6]["y_vol_a"]["Material Support 1_Vol"]*glu)**2+(output[1][6]["y_vol_u"]["Material Support Slab_Vol"]*glu)**2)**0.5/gfa,
+    ((output[1][7]["y_vol_u"]["Material Support 1_Vol"]*conc)**2+(output[1][7]["y_vol_u"]["Support_ratio"]*output[1][7]["y_vol_a"]["Material Support 1_Vol"]*glu)**2+(output[1][7]["y_vol_u"]["Material Support Slab_Vol"]*conc)**2)**0.5/gfa
+    ]
+var labels = ['Shear Wall (Concrete) w. Concrete Slab',
+'Shear Wall (Concrete/Glulam) w. Glulam Slab',
+'Shear Wall (Concrete/CLT) w. Concrete Slab',
+'Shear Wall (CLT) w. CLT Slab',
+'Col. Beam (Concerte/Steel) w. Concrete Slab',
+'Col. Beam (Concrete) w. Concrete Slab',
+'Col. Beam (Concrete/Glulam) w. Glulam Slab',
+'Col. Beam (Concrete/Glulam) w. Concrete Slab']
 var data = {
-labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+labels: labels,
+
 datasets: [{
-    data: [20, 10, 4, 2]
+    data: [(output[1][0]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][0]["y_vol_a"]["Material Support Slab_Vol"]*conc)/gfa, 
+    (output[1][1]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][1]["y_vol_a"]["Support_ratio"]*output[1][1]["y_vol_a"]["Material Support 1_Vol"]*glu+output[1][1]["y_vol_a"]["Material Support Slab_Vol"]*glu)/gfa, 
+    (output[1][2]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][2]["y_vol_a"]["Support_ratio"]*output[1][2]["y_vol_a"]["Material Support 1_Vol"]*clt+output[1][2]["y_vol_a"]["Material Support Slab_Vol"]*conc)/gfa, 
+    (output[1][3]["y_vol_a"]["Material Support 1_Vol"]*clt+output[1][3]["y_vol_a"]["Material Support Slab_Vol"]*clt)/gfa,
+    (output[1][4]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][4]["y_vol_a"]["Support_ratio"]*output[1][4]["y_vol_a"]["Material Support 1_Vol"]*steel+output[1][4]["y_vol_a"]["Material Support Slab_Vol"]*conc)/gfa,
+    (output[1][5]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][5]["y_vol_a"]["Material Support Slab_Vol"]*conc)/gfa,
+    (output[1][6]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][6]["y_vol_a"]["Support_ratio"]*output[1][6]["y_vol_a"]["Material Support 1_Vol"]*glu+output[1][6]["y_vol_a"]["Material Support Slab_Vol"]*glu)/gfa,
+    (output[1][7]["y_vol_a"]["Material Support 1_Vol"]*conc+output[1][7]["y_vol_a"]["Support_ratio"]*output[1][7]["y_vol_a"]["Material Support 1_Vol"]*glu+output[1][7]["y_vol_a"]["Material Support Slab_Vol"]*conc)/gfa
+    ]
 }]
 }
 var options = {
+tooltips: {
+callbacks: {
+    label: function(tooltipItem, data) {
+        var label =   (Math.round(tooltipItem.yLabel * 100) / 100).toString() + " ± " + (Math.round(uncertain[tooltipItem.index] * 100) / 100).toString()
+        return label
+    },
+    title: function(tooltipItem, data) {
+		return labels[tooltipItem[0].datasetIndex]
+    }
+}
+},
 title: {display: true, text: 'GWP per Gross Floor Area of different construction systems'},
+legend: {display: false}
 }
 
 if (radarchart != null) {radarchart.destroy()}
