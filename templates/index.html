@@ -123,6 +123,21 @@
 	    		<div class="col-md-4 indigo-text text-right">10</span></div>
 		    </div>
 			<input type="range" class="custom-range" min="1" max="10" step="1" id="no_of_storage" oninput="showVal('no_of_storage_h',this.value)" onchange="this.value">	
+			<h5 class="pt-5">Infill Inputs</h5>
+			<div class="font-weight-bold pt-">Partitions</div>
+			  <select class="form-control" id="sel1">
+			    <option>Drywall (Mixed Gypsum)</option>
+			    <option>Drywall (Natural Gypsum)</option>
+			    <option>Drywall (FGD)</option>
+			  </select>
+
+			<div class="font-weight-bold pt-1">Glazing</div>
+			  <select class="form-control" id="sel1">
+			  	<option>Single Pane IGU</option>
+			    <option>Double Pane IGU</option>
+			    <option>Triple Pane IGU</option>
+			    <option>Laminated Glass</option>
+			  </select>
 
 			<button type="button" class="btn btn-primary mt-5" onclick="sendData()">Predict!</button>	
 		</div>
@@ -130,26 +145,32 @@
     <div class="col-md-6">
     	<div class="col-md-2"></div>
     	<div class="col-md-8">
-    		<canvas class="mt-5" id="shoebox" height="200%"></canvas>
-    		<canvas class="mt-5" id="barchart" height="145%"></canvas>
-    		<canvas class="mt-5" id="radar" height="250%"></canvas>
+    		<canvas class="mt-1" id="shoebox" height="250%"></canvas>
+    		<canvas class="mt-1" id="barchart" height="145%"></canvas>
+    		<canvas class="mt-1" id="radar" height="250%"></canvas>
     	</div>
     	<div class="col-md-2"></div>
       <p id='out'></p>
     </div>
   </div>
+<hr>
+<footer class="page-footer font-small blue" >
+<div class="row">
+<div class="footer-copyright text-left small text-muted">© 2019 Copyright:
+<a href="https://idc.sutd.edu.sg//"> SUTD IDC</a>
+<div>Predictions are from manually labelled data. We do not make any warranties about completeness, reliability and accuracy of this information</div>
+</div>
+</footer>
 
 </main><!-- /.container -->
 
 <script type="text/javascript">
 var output;
-
 function showVal(k,t){
 	document.getElementById(k).innerHTML=t;
 }
 
 function sendData(){
-
 	x_input=[{"Building Floor Area": parseFloat(document.getElementById("site_area").value),
 	 "Building para": parseFloat(document.getElementById("site_para").value),
 	 "Construction System_Column Beam_Concrete_Glulam_Slab_Concrete": 1,
@@ -168,126 +189,84 @@ function sendData(){
 	 "No of Storage": parseInt(document.getElementById("no_of_storage").value),
 	 "No of WC": parseInt(document.getElementById("no_of_wc").value),
 	 "No. of units in floor": parseInt(document.getElementById("no_of_units").value)}];
-
 	 console.log(x_input);
-
 	 fetch("/req/", {
 	  method: "post",
 	  headers: {
 	    'Accept': 'application/json',
 	    'Content-Type': 'application/json'
 	  },
-
-	  //make sure to serialize your JSON body
 	  body: JSON.stringify(x_input)
 	})
 	.then( (response) => {
 		response.json().then( (res) => {
 			output = res
+			maxbedroomlen = Math.max(Math.sqrt((output[0]["y_area_a"]["Br area"]/output[0]["y_area_a"]["Br para"]))*output[0]["y_area_a"]["Br para"],Math.sqrt((output[0]["y_area_a"]["Br area"]/output[0]["y_area_a"]["Br para"])))
+			servedarea = output[0]["y_area_a"]["Br area"]+output[0]["y_area_a"]["Mbr Area"]+output[0]["y_area_a"]["Lvr Area"]
+			servedheight = servedarea/maxbedroomlen
+			servingarea = output[0]["y_area_a"]["Kit area"]+output[0]["y_area_a"]["WC area"]+output[0]["y_area_a"]["Storage Area"]
+			servingheight = servingarea/maxbedroomlen
+			publicarea = parseFloat(document.getElementById("site_area").value)*output[0]["y_area_a"]["Public circulation ratio"]/parseInt(document.getElementById("no_of_units").value)
+			publicheight = publicarea/maxbedroomlen
+			createShoebox(maxbedroomlen,servedarea,servedheight,servingarea,servingheight,publicarea,publicheight)
 		});
 	});
 };
 
-var ctx2 = document.getElementById("shoebox");
-var myChart2 = new Chart(ctx2, {
-  type: 'bar',
-  data: {
-    labels: ['Shoebox of a Unit'],
-    datasets: [
-      {
-        label: 'Serving Space',
-        //barThickness:50,
-        data: [67.8],
-        backgroundColor: '#beccc2',
-      },
-      {
-        label: 'Served Space',
-        data: [20.7],
-        backgroundColor: '#4c524e',
-      },
-      {
-        label: 'Public Circulation',
-        data: [11.4],
-        backgroundColor: '#e9f0f2',
-      }
-    ]
+var shoebox_container = document.getElementById("shoebox");
+function createShoebox(maxbedroomlen,servedarea,servedheight,servingarea,servingheight,publicarea,publicheight){
+var data = 
+{labels: [Math.round(maxbedroomlen*100)/100],
+datasets: [
+  {
+    label: 'Served Space',
+    barPercentage: Math.round(maxbedroomlen*100)/100/10,
+    data: [servedheight],
+    backgroundColor: '#beccc2',
   },
-  options: {
-    scales: {
-      xAxes: [{ stacked: true }],
-      yAxes: [{ stacked: true }]
-    }
-  }
-});
-
-var barOptions_stacked = {
-    tooltips: {
-        enabled: false
-    },
-    hover :{
-        animationDuration:0
-    },
-    scales: {
-        xAxes: [{
-            ticks: {
-                beginAtZero:true,
-                fontFamily: "'Open Sans Bold', sans-serif",
-                fontSize:11
-            },
-            scaleLabel:{
-                display:false
-            },
-            gridLines: {
-            }, 
-            stacked: true
-        }],
-        yAxes: [{
-            gridLines: {
-                display:false,
-                color: "#fff",
-                zeroLineColor: "#fff",
-                zeroLineWidth: 0
-            },
-            ticks: {
-                fontFamily: "'Open Sans Bold', sans-serif",
-                fontSize:11
-            },
-            stacked: true
-        }]
-    },
-    legend:{
-        display:true
-    },
-    
-    animation: {
-        onComplete: function () {
-            var chartInstance = this.chart;
-            var ctx = chartInstance.ctx;
-            ctx.textAlign = "left";
-            ctx.font = "9px Open Sans";
-            ctx.fillStyle = "#fff";
-
-            Chart.helpers.each(this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                Chart.helpers.each(meta.data.forEach(function (bar, index) {
-                    data = dataset.data[index];
-                    if(i==0){
-                        ctx.fillText(data, 50, bar._model.y+4);
-                    } else {
-                        ctx.fillText(data, bar._model.x-25, bar._model.y+4);
-                    }
-                }),this)
-            }),this);
-        }
-    },
-    pointLabelFontFamily : "Quadon Extra Bold",
-    scaleFontFamily : "Quadon Extra Bold",
+  {
+    label: 'Serving Space',
+    barPercentage: Math.round(maxbedroomlen*100)/100/10,
+    data: [servingheight],
+    backgroundColor: '#4c524e',
+  },
+  {
+    label: 'Public Circulation',
+    barPercentage: Math.round(maxbedroomlen*100)/100/10,
+    data: [publicheight],
+    backgroundColor: '#e9f0f2',
+  }]
+};
+var tooltipsLabel = ['Served Space','Serving Space','Public Space'];
+var tooltipheight = [servedheight,servingheight,publicheight]
+var options = {
+	tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label =  'Total Area: ' + Math.round(tooltipItem.yLabel*tooltipItem.xLabel * 100) / 100 + ' m2 (' + Math.round(tooltipItem.yLabel*tooltipItem.xLabel/(servedarea+servingarea+publicarea) * 100 *100) / 100 + ')%'
+                    return label;
+                },
+                title: function(tooltipItem, data) {
+                    console.log(tooltipItem[0].datasetIndex)
+            		return tooltipsLabel[tooltipItem[0].datasetIndex] + ': ' +  Math.round(tooltipheight[tooltipItem[0].datasetIndex] *100)/100 + ' m';
+                }
+            }
+        },
+title: {display: true, text: 'Shoebox of a Unit'},
+scales: {
+	xAxes: [{ticks: {drawTicks:true}, stacked:true, scaleLabel:{display:true,labelString:'Max Area Length (m)'}}],
+    yAxes: [{ticks: {drawTicks:true}, stacked:true, scaleLabel:{display:true,labelString:'Max Area Height (m)'}}]
+	}
 };
 
+var shoebox = new Chart(shoebox_container, {type: 'bar', data: data, options: options});
+
+}
 
 
-var ctx = document.getElementById("barchart");
-var myChart = new Chart(ctx, {
+var barchart_container = document.getElementById("barchart");
+function createBarchart(){
+var barchart = new Chart(barchart_container, {
     type: 'horizontalBar',
     data: {
         labels: ["2014", "2013", "2012", "2011"],
@@ -307,22 +286,14 @@ var myChart = new Chart(ctx, {
         }]
     },
 
-    options: barOptions_stacked,
+    options: options,
 });
-options = {
-    scale: {
-        angleLines: {
-            display: false
-        },
-        ticks: {
-            suggestedMin: 50,
-            suggestedMax: 100
-        }
-    }
-};
+}
 
-var ctx1 = document.getElementById("radar");
-var myRadarChart = new Chart(ctx1, {
+
+var radar_container = document.getElementById("radar");
+function createRadar(){
+var myRadarChart = new Chart(radar_container, {
     type: 'radar',
     data: {
     labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
@@ -332,7 +303,7 @@ var myRadarChart = new Chart(ctx1, {
 	},
     options: options
 });
-
+}
 
 </script>
 
