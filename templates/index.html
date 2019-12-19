@@ -209,6 +209,7 @@ function sendData(){
 			publicarea = parseFloat(document.getElementById("site_area").value)*output[0]["y_area_a"]["Public circulation ratio"]/parseInt(document.getElementById("no_of_units").value)
 			publicheight = publicarea/maxbedroomlen
 			createShoebox(maxbedroomlen,servedarea,servedheight,servingarea,servingheight,publicarea,publicheight)
+			createBarchart()
 		});
 	});
 };
@@ -247,8 +248,7 @@ var options = {
                     return label;
                 },
                 title: function(tooltipItem, data) {
-                    console.log(tooltipItem[0].datasetIndex)
-            		return tooltipsLabel[tooltipItem[0].datasetIndex] + ': ' +  Math.round(tooltipheight[tooltipItem[0].datasetIndex] *100)/100 + ' m';
+            		return tooltipsLabel[tooltipItem[0].datasetIndex] + ' Height: ' +  Math.round(tooltipheight[tooltipItem[0].datasetIndex] *100)/100 + ' m';
                 }
             }
         },
@@ -266,41 +266,45 @@ var shoebox = new Chart(shoebox_container, {type: 'bar', data: data, options: op
 
 var barchart_container = document.getElementById("barchart");
 function createBarchart(){
-var barchart = new Chart(barchart_container, {
-    type: 'horizontalBar',
-    data: {
-        labels: ["2014", "2013", "2012", "2011"],
-        
-        datasets: [{
-            data: [727, 589, 537, 543, 574],
-            backgroundColor: "rgba(63,103,126,1)",
-            hoverBackgroundColor: "rgba(50,90,100,1)"
-        },{
-            data: [238, 553, 746, 884, 903],
-            backgroundColor: "rgba(163,103,126,1)",
-            hoverBackgroundColor: "rgba(140,85,100,1)"
-        },{
-            data: [1238, 553, 746, 884, 903],
-            backgroundColor: "rgba(63,203,226,1)",
-            hoverBackgroundColor: "rgba(46,185,235,1)"
-        }]
-    },
+var data = {
+labels: ["2014", "2013", "2012", "2011"],
 
-    options: options,
-});
+datasets: [{
+    data: [727, 589, 537, 543, 574],
+    backgroundColor: "rgba(63,103,126,1)",
+    hoverBackgroundColor: "rgba(50,90,100,1)"
+},{
+    data: [238, 553, 746, 884, 903],
+    backgroundColor: "rgba(163,103,126,1)",
+    hoverBackgroundColor: "rgba(140,85,100,1)"
+},{
+    data: [1238, 553, 746, 884, 903],
+    backgroundColor: "rgba(63,203,226,1)",
+    hoverBackgroundColor: "rgba(46,185,235,1)"
+}]
+}
+var options = {
+title: {display: true, text: 'Material Breakdown'},
+};	
+var barchart = new Chart(barchart_container, { type: 'horizontalBar',data: data, options: options });
 }
 
 
 var radar_container = document.getElementById("radar");
 function createRadar(){
+
+var data = {
+labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+datasets: [{
+    data: [20, 10, 4, 2]
+}]
+}
+var options = {
+title: {display: true, text: 'Radar Chart'},
+}
 var myRadarChart = new Chart(radar_container, {
     type: 'radar',
-    data: {
-    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
-    datasets: [{
-        data: [20, 10, 4, 2]
-    }]
-	},
+    data: data,
     options: options
 });
 }
